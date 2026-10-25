@@ -1,0 +1,73 @@
+{
+  "_about": "CT40.A9.Solari fields definition. Defines the drums (what each flap unit can show, in flip order), the field types built from them, and the columns of the board (left to right). Column labels live in CT40.A9.Solari.schedule.json.",
+  "version": "CT40.A9.Solari",
+
+  "drums": {
+    "_about": "Each drum lists every glyph a flap unit can show, in the order the flaps fall. A change always advances forward through the list (A->E shows B, C, D) and wraps around, exactly like a real Solari drum. 'plate': false means a printed, non-flapping character (the colon).",
+    "alnum": { "glyphs": [" ", "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","0","1","2","3","4","5","6","7","8","9",".","-","&","/","'"], "widthUnits": 1.0 },
+    "digit": { "glyphs": [" ", "0","1","2","3","4","5","6","7","8","9"], "widthUnits": 1.0 },
+    "ampm":  { "glyphs": [" ", "AM", "PM"], "widthUnits": 1.9 },
+    "colon": { "glyphs": [":"], "widthUnits": 0.45, "plate": false }
+  },
+
+  "types": {
+    "_about": "A field type is a sequence of cells. 'alphanumeric' is N alnum cells (N = the column's length). 'time' is H H : M M then AM/PM.",
+    "alphanumeric": { "kind": "text", "drum": "alnum" },
+    "time": { "kind": "time", "cells": ["digit", "digit", "colon", "digit", "digit", "gap", "ampm"] }
+  },
+
+  "columns": [
+    { "id": "train",  "type": "alphanumeric", "length": 40 },
+    { "id": "status", "type": "alphanumeric", "length": 10 },
+    { "id": "from",   "type": "alphanumeric", "length": 12 },
+    { "id": "to",     "type": "alphanumeric", "length": 12 },
+    { "id": "time",   "type": "time" },
+    { "id": "gate",   "type": "alphanumeric", "length": 3, "align": "right" }
+  ],
+
+  "board": {
+    "rows": 10,
+    "size": 0.7,
+    "_size": "size of the master clock and flap rows as a fraction of full-window fit (0.2-1.0); the Size -/+ buttons change it live and the browser remembers your choice",
+    "labelSize": 0.7,
+    "_labelSize": "size of the title and column headings (fixed; not changed by the Size buttons)",
+    "uppercase": true,
+    "flapMs": 110,
+    "flapStaggerMs": 140,
+    "cellAspect": 0.64,
+    "cellGapUnits": 0.10,
+    "rowGapUnits": 0.34,
+    "columnGapUnits": 1.1,
+    "gapUnits": 0.35,
+    "colors": {
+      "background": "#000000",
+      "flap": "#161616",
+      "flapEdge": "#0b0b0b",
+      "glyph": "#f2f0e8",
+      "splitLine": "#7a7a7a",
+      "label": "#d8d6ce"
+    },
+    "font": "bold {px}px 'Helvetica Neue', Helvetica, Arial, sans-serif"
+  },
+
+  "clock": {
+    "_about": "Master clock at top centre, drawn with the same flaps. Format h:mm:ss AM/PM.",
+    "show": true,
+    "scale": 1.45,
+    "sound": true,
+    "_sound": "clack when the clock flaps change (every second). The C key toggles it live."
+  },
+
+  "sound": {
+    "_about": "Clack sample for each flap landing. Default ON. 'slice' is the part of one.wav used per flap, in seconds (the file holds two strikes; the first is the sharp metal one). maxVoicesPerFrame caps simultaneous clacks so a whole-board change roars instead of clipping.",
+    "enabled": true,
+    "volume": 1.0,
+    "loudness": 2.5,
+    "_loudness": "make-up gain after the compressor; a limiter stops clipping. Raise for louder at the same slider position.",
+    "file": "audio/one.wav",
+    "slice": [0.0, 0.11],
+    "maxVoicesPerFrame": 5,
+    "pitchJitter": 0.08,
+    "stereoSpread": 0.7
+  }
+}
